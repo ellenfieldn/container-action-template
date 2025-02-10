@@ -70,11 +70,11 @@ need to perform some initial setup steps before you can develop your action.
 
 1. :hammer_and_wrench: Build the container
 
-   Make sure to replace `actions/container-toolkit-action-nodist` with an appropriate
-   label for your container.
+   Make sure to replace `ellenfieldn/container-toolkit-action-nodist` with an
+   appropriate label for your container.
 
    ```bash
-   docker build -t actions/container-toolkit-action-nodist .
+   docker build -t ellenfieldn/container-toolkit-action-nodist .
    ```
 
 1. :white_check_mark: Test the container
@@ -82,7 +82,7 @@ need to perform some initial setup steps before you can develop your action.
    You can pass individual environment variables using the `--env` or `-e` flag.
 
    ```bash
-   $ docker run --env INPUT_MILLISECONDS=2000 actions/container-toolkit-action-nodist
+   $ docker run --env INPUT_MILLISECONDS=2000 ellenfieldn/container-toolkit-action-nodist
    ::debug::The event payload: {}
    16:19:19 GMT+0000 (Coordinated Universal Time)
    16:19:21 GMT+0000 (Coordinated Universal Time)
@@ -95,7 +95,7 @@ need to perform some initial setup steps before you can develop your action.
    ```bash
    $ echo "INPUT_MILLISECONDS=2000" > ./.env.test
 
-   $ docker run --env-file ./.env.test actions/container-toolkit-action-nodist
+   $ docker run --env-file ./.env.test ellenfieldn/container-toolkit-action-nodist
    ::debug::The event payload: {}
    16:19:19 GMT+0000 (Coordinated Universal Time)
    16:19:21 GMT+0000 (Coordinated Universal Time)

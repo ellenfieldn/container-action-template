@@ -10,5 +10,9 @@ WORKDIR /usr/src/app
 # Copy the repository contents to the container
 COPY . .
 
+RUN npm install
+
+RUN npm run all
+
 # Run the specified command within the container
 ENTRYPOINT ["node", "/usr/src/app/dist/index.js"]
