@@ -28,28 +28,26 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          echo
-          cat <<- EOFOUT >> "${GITHUB_OUTPUT}"
-            matrix<<EOFIN
-            {
-              "images": [
-                {
-                  "prefix": "",
-                  "target": "standard"
-                },
-                {
-                  "prefix": "slim-",
-                  "target": "slim"
-                },
-                {
-                  "prefix": "extra-",
-                  "target": "extra"
-                }
-              ]
-            }
-          EOFIN
-          EOFOUT
-
+          matrix=$(jq -c << EOF
+          {
+            "images": [
+              {
+                "prefix": "",
+                "target": "standard"
+              },
+              {
+                "prefix": "slim-",
+                "target": "slim"
+              },
+              {
+                "prefix": "extra-",
+                "target": "extra"
+              }
+            ]
+          }
+          EOF
+          )
+          echo "matrix=${matrix}" >> ${GITHUB_OUTPUT}
 
   # Set build metadata before running any other job so we can reuse them for
   # both the standandard and the slim images, and for verification as well.
