@@ -30,7 +30,7 @@ jobs:
         run: |
           echo
           cat <<- EOFOUT >> "${GITHUB_OUTPUT}"
-            matrix<<- EOFIN
+            matrix<< EOFIN
             {
               "images": [
                 {
