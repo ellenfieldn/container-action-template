@@ -28,9 +28,9 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          echo 
+          echo
           cat <<- EOFOUT >> "${GITHUB_OUTPUT}"
-            matrix<<-EOFIN
+            matrix<<- EOFIN
             {
               "images": [
                 {
@@ -73,7 +73,7 @@ jobs:
 
       - name: Install Just
         run: |
-          npm install -g rust-just
+          npm install -g just-install
 
       - name: Set build metadata
         id: set-build-metadata
@@ -141,7 +141,7 @@ jobs:
 
       - name: Install Just
         run: |
-          npm install -g rust-just
+          npm install -g just-install
 
       - name: Free Disk space
         shell: bash
@@ -281,7 +281,7 @@ jobs:
 
       - name: Install Just
         run: |
-          npm install -g rust-just
+          npm install -g just-install
 
       - name:
           Download ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }} container image
