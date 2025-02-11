@@ -28,7 +28,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          cat <<- EOF >> "$GITHUB_OUTPUT"
+          cat <<- EOF >> "${GITHUB_OUTPUT}"
             matrix=
             {
               "images": [
