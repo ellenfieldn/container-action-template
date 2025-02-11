@@ -318,28 +318,3 @@ jobs:
           ${{ contains(needs.*.result, 'failure') || contains(needs.*.result,
           'cancelled') || contains(needs.*.result, 'skipped') }}
         run: exit 1
-
-  preview-release-notes:
-    if:
-      github.event_name == 'pull_request' && github.repository ==
-      github.event.pull_request.head.repo.full_name && github.repository ==
-      'ellenfieldn/container-toolkit-action-nodist'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install Just
-        run: |
-          npm install -g rust-just
-
-      - name: Setup authentication token
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" > .github-personal-access-token
-
-      - name: Generate a preview of the release notes
-        run: |
-          make release-please-dry-run
