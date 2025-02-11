@@ -3,21 +3,13 @@ name: Build and Test
 on:
   pull_request:
   push:
+    branches:
+      - main
   merge_group:
   workflow_dispatch:
 
 # Don't grant any access by default
 permissions: {}
-
-env:
-  build-matrix: |
-    images:
-      - prefix: ''
-        target: standard
-      - prefix: 'slim-'
-        target: slim
-      - prefix: 'extra-'
-        target: extra
 
 jobs:
   set-build-matrix:
@@ -116,14 +108,7 @@ jobs:
       cancel-in-progress: true
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }} # Note: This must by synchronized with the matrix in the test-local-action job
-        # images:
-        #   - prefix: ''
-        #     target: standard
-        #   - prefix: 'slim-'
-        #     target: slim
-        #   - prefix: 'extra-'
-        #     target: extra
+      matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }}
     timeout-minutes: 60
     env:
       CONTAINER_IMAGE_ID:
@@ -182,22 +167,13 @@ jobs:
     name: Test the Local GitHub Action
     runs-on: ubuntu-latest
     needs:
+      - set-build-matrix
       - set-build-metadata
       - build-container-image
     permissions:
       contents: read
     strategy:
-      matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }} # Note: This must by synchronized with the matrix in the build-container-image job
-        # images:
-        #   - container-image-id: container-toolkit-action-nodist-latest
-        #     prefix: ''
-        #     target: standard
-        #   - container-image-id: container-toolkit-action-nodist-slim-latest
-        #     prefix: slim-
-        #     target: slim
-        #   - container-image-id: container-toolkit-action-nodist-extra-latest
-        #     prefix: extra-
-        #     target: extra
+      matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }}
     env:
       CONTAINER_IMAGE_ID:
         'ghcr.io/ellenfieldn/container-toolkit-action-nodist:${{ matrix.images.prefix }}latest'
@@ -249,16 +225,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }}
-        # images:
-        #   - container-image-id: container-toolkit-action-nodist-latest
-        #     prefix: ''
-        #     target: standard
-        #   - container-image-id: container-toolkit-action-nodist-slim-latest
-        #     prefix: slim-
-        #     target: slim
-        #   - container-image-id: container-toolkit-action-nodist-extra-latest
-        #     prefix: extra-
-        #     target: extra
     env:
       CONTAINER_IMAGE_ID:
         'ghcr.io/ellenfieldn/container-toolkit-action-nodist:${{ matrix.images.prefix }}latest'
