@@ -28,8 +28,9 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          cat <<- EOF >> "${GITHUB_OUTPUT}"
-            matrix=
+          echo 
+          cat <<- EOFOUT >> "${GITHUB_OUTPUT}"
+            matrix<<-EOFIN
             {
               "images": [
                 {
@@ -46,7 +47,8 @@ jobs:
                 }
               ]
             }
-          EOF
+            EOFIN
+          EOFOUT
 
 
   # Set build metadata before running any other job so we can reuse them for
@@ -85,9 +87,9 @@ jobs:
             exit 1
           fi
 
-          BUILD_DATE = just get-build-date
-          BUILD_REVISION = just get-build-revision
-          BUILD_VERSION = just get-build-version
+          BUILD_DATE = `just get-build-date`
+          BUILD_REVISION = `just get-build-revision`
+          BUILD_VERSION = `just get-build-version`
 
           echo "Build date (GH Actions workflow): ${BUILD_DATE}"
           echo "Build revision (GH Actions workflow): ${BUILD_REVISION}"
