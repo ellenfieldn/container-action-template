@@ -20,8 +20,8 @@ help:
 check-just:
     #!/usr/bin/bash
     find . -type f -name "*.just" | while read -r file; do
-    	echo "Checking syntax: $file"
-    	just --unstable --fmt --check -f $file
+      echo "Checking syntax: $file"
+      just --unstable --fmt --check -f $file
     done
     echo "Checking syntax: Justfile"
     just --unstable --fmt --check -f Justfile
@@ -31,8 +31,8 @@ check-just:
 fix-just:
     #!/usr/bin/bash
     find . -type f -name "*.just" | while read -r file; do
-    	echo "Checking syntax: $file"
-    	just --unstable --fmt -f $file
+      echo "Checking syntax: $file"
+      just --unstable --fmt -f $file
     done
     echo "Checking syntax: Justfile"
     just --unstable --fmt -f Justfile || { exit 1; }
@@ -40,11 +40,11 @@ fix-just:
 # Build the container image
 build: docker-build-check
     DOCKER_BUILDKIT=1 docker buildx build --load \
-    	--build-arg BUILD_DATE=${BUILD_DATE} \
-    	--build-arg BUILD_REVISION=${BUILD_REVISION} \
-    	--build-arg BUILD_VERSION=${BUILD_VERSION} \
-    	--target ${IMAGE} \
-    	-t ${TEST_CONTAINER_URL} .
+      --build-arg BUILD_DATE=${BUILD_DATE} \
+      --build-arg BUILD_REVISION=${BUILD_REVISION} \
+      --build-arg BUILD_VERSION=${BUILD_VERSION} \
+      --target ${IMAGE} \
+      -t ${TEST_CONTAINER_URL} .
 
 # Run the test suite
 test: validate-labels docker-build-check npm-audit test-container
@@ -66,10 +66,10 @@ docker-build-check:
 # Open an interactive shell in the container
 run:
     docker run ${DOCKER_FLAGS} \
-    	--interactive \
-    	--entrypoint /bin/bash \
-    	--rm \
-    	${TEST_CONTAINER_URL}
+      --interactive \
+      --entrypoint /bin/bash \
+      --rm \
+      ${TEST_CONTAINER_URL}
 
 test-container:
     docker run \

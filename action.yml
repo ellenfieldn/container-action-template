@@ -16,6 +16,6 @@ outputs:
 
 runs:
   using: docker
-  image: "docker://ghcr.io/ellenfieldn/container-toolkit-action-nodist:v7.2.1"
+  image: 'docker://ghcr.io/ellenfieldn/container-toolkit-action-nodist:v7.2.1'
   env:
     INPUT_MILLISECONDS: ${{ inputs.milliseconds }}
