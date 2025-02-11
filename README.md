@@ -14,6 +14,14 @@ publishing, and versioning guidance.
 For more information on the GitHub Actions toolkit, see the
 [`actions/toolkit` repository](https://github.com/actions/toolkit/tree/main/docs)
 
+## Acknowledgements
+
+- [GitHub Container Toolkit Action](https://github.com/actions/container-toolkit-action/) -
+  Used this as the starting point.
+- [Super Linter](https://github.com/super-linter/super-linter) - They already
+  figured out the hard parts to publish and use container images to avoid having
+  to build the image every time the action is used.
+
 ## Create Your Own Action
 
 To create your own action, you can use this repository as a template! Just
