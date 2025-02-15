@@ -8,84 +8,128 @@ export IMAGE := env('CONTAINER_IMAGE_TARGET', "standard")
 export BUILD_DATE := env('BUILD_DATE', `date -u +'%Y-%m-%dT%H:%M:%SZ'`)
 export BUILD_REVISION := env('BUILD_REVISION', `git rev-parse HEAD`)
 export BUILD_VERSION := env('BUILD_VERSION', `git rev-parse HEAD`)
-export TEST_CONTAINER_URL := env('CONTAINER_IMAGE_ID', "ghcr.io/ellenfieldn/container-action-template:latest")
+export DEFAULT_IMAGE_NAME := env('CONTAINER_IMAGE_NAME', "container-action-template")
+export DEFAULT_CONTAINER_URL := env('CONTAINER_IMAGE_ID', "ghcr.io/ellenfieldn/container-action-template:latest")
 
 # Show help
-[group('Just')]
 help:
     @just --list
 
-# Check Just Syntax
-[group('Just')]
-check-just:
-    #!/usr/bin/bash
-    find . -type f -name "*.just" | while read -r file; do
-      echo "Checking syntax: $file"
-      just --unstable --fmt --check -f $file
-    done
-    echo "Checking syntax: Justfile"
-    just --unstable --fmt --check -f Justfile
-
-# Fix Just Syntax
-[group('Just')]
-fix-just:
-    #!/usr/bin/bash
-    find . -type f -name "*.just" | while read -r file; do
-      echo "Checking syntax: $file"
-      just --unstable --fmt -f $file
-    done
-    echo "Checking syntax: Justfile"
-    just --unstable --fmt -f Justfile || { exit 1; }
+# Initialize the local development environment for the project
+init:
+    npm install
 
 # Build the container image
-build: docker-build-check
+[group('Build, Run, Test')]
+build $container_url=DEFAULT_CONTAINER_URL: _docker-build-check
     DOCKER_BUILDKIT=1 docker buildx build --load \
       --build-arg BUILD_DATE=${BUILD_DATE} \
       --build-arg BUILD_REVISION=${BUILD_REVISION} \
       --build-arg BUILD_VERSION=${BUILD_VERSION} \
       --target ${IMAGE} \
-      -t ${TEST_CONTAINER_URL} .
-
-# Run the test suite
-test: validate-labels docker-build-check npm-audit test-container
-
-alias fmt := format
-# Format the codebase
-format:
-    npm run format:write
-
-# Run linters
-lint:
-    npm run lint
+      -t ${container_url} .
 
 # Run Docker build checks against the container image
-docker-build-check:
+_docker-build-check:
     DOCKER_BUILDKIT=1 docker buildx build --check \
     .
 
 # Open an interactive shell in the container
-run:
+[group('Build, Run, Test')]
+run $container_url=DEFAULT_CONTAINER_URL:
     docker run ${DOCKER_FLAGS} \
       --interactive \
       --entrypoint /bin/bash \
       --rm \
-      ${TEST_CONTAINER_URL}
+      ${container_url}
 
-test-container:
+alias fix-format := format
+alias fmt := format
+
+# Format all files in repository
+[group('Code Quality')]
+format:
+    npm run format:write
+    @just _format-just
+
+# Check the format of all files in repository
+[group('Code Quality')]
+check-format:
+    npm run format:check
+    @just _check-format-just
+
+# Check Just Syntax
+_check-format-just:
+    #!/usr/bin/env sh
+    set -euxo pipefail
+
+    find . -type f -name "*.just" | while read -r file; do
+      echo "Checking syntax: $file"
+      just --unstable --fmt --check -f $file
+    done
+    echo "Checking syntax: Justfile"
+    just --unstable --fmt --check -f {{ justfile() }}
+
+# Fix Just Syntax
+_format-just:
+    #!/usr/bin/env sh
+    set -euxo pipefail
+
+    find . -type f -name "*.just" | while read -r file; do
+      echo "Fixing syntax: $file"
+      just --unstable --fmt -f $file
+    done
+    echo "Fixing syntax: Justfile"
+    just --unstable --fmt -f {{ justfile() }} || { exit 1; }
+
+# Lint all files in repository
+[group('Code Quality')]
+lint:
+    npm run lint
+    docker run \
+      -e DEFAULT_BRANCH=main \
+      -e FILTER_REGEX_EXCLUDE=dist/**/* \
+      -e LOG_LEVEL=INFO \
+      -e RUN_LOCAL=true \
+      -e VALIDATE_ALL_CODEBASE=true \
+      -e VALIDATE_JAVASCRIPT_STANDARD=false \
+      -e VALIDATE_JAVASCRIPT_ES=false \
+      -e VALIDATE_JSCPD=false \
+      -e VALIDATE_JSON=false \
+      -e VALIDATE_TYPESCRIPT_ES=false \
+      -e VALIDATE_TYPESCRIPT_STANDARD=false \
+      -v ./:/tmp/lint \
+      --rm \
+      ghcr.io/super-linter/super-linter:latest
+
+# Scan for vulnerabilities
+[group('Code Quality')]
+scan:
+    npm audit
+
+# Run the test suite
+[group('Build, Run, Test')]
+test: _validate-labels _docker-build-check _test-container
+
+[group('Build, Run, Test')]
+_test-container $container_url=DEFAULT_CONTAINER_URL:
     docker run \
       -e INPUT_MILLISECONDS=1000 \
       --rm \
-      ${TEST_CONTAINER_URL}
+      ${container_url}
 
 # Validate container image labels
-validate-labels: build
-    @echo "Validating labels for: ${TEST_CONTAINER_URL}";
-    @just _validate-labels ${TEST_CONTAINER_URL} "org.opencontainers.image.created" "${BUILD_DATE}"
-    @just _validate-labels ${TEST_CONTAINER_URL} "org.opencontainers.image.revision" "${BUILD_REVISION}"
-    @just _validate-labels ${TEST_CONTAINER_URL} "org.opencontainers.image.version" "${BUILD_VERSION}"
+[group('Build, Run, Test')]
+_validate-labels $container_url=DEFAULT_CONTAINER_URL: build
+    @echo "Validating labels for: ${container_url}";
+    @just _validate-label ${container_url} "org.opencontainers.image.created" "${BUILD_DATE}"
+    @just _validate-label ${container_url} "org.opencontainers.image.revision" "${BUILD_REVISION}"
+    @just _validate-label ${container_url} "org.opencontainers.image.version" "${BUILD_VERSION}"
 
-_validate-labels $container_url $label_key $expected_label:
+_validate-label $container_url $label_key $expected_label:
     #!/usr/bin/env sh
+    set -euxo pipefail
+
     ACTUAL_LABEL="$(docker inspect --format "{{{{ index .Config.Labels \"${label_key}\" }}" "${container_url}")"
     if [[ "${ACTUAL_LABEL}" != "${expected_label}" ]]; then
       echo "[ERROR] Invalid container image label: ${label_key}: ${ACTUAL_LABEL}. Expected: ${expected_label}"
@@ -94,15 +138,14 @@ _validate-labels $container_url $label_key $expected_label:
       echo "${label_key} is valid: ${ACTUAL_LABEL}. Expected: ${expected_label}"
     fi
 
-get-build-date:
+[group('Util')]
+_get-build-date:
     @echo "${BUILD_DATE}" # Already set by default
 
-get-build-revision:
+[group('Util')]
+_get-build-revision:
     @echo "${BUILD_REVISION}" # Already set by default
 
-get-build-version:
+[group('Util')]
+_get-build-version:
     @echo "${BUILD_VERSION}" # Already set by default
-
-# Run npm audit to check for known vulnerable dependencies
-npm-audit:
-    npm audit
