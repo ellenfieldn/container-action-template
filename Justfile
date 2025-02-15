@@ -60,7 +60,7 @@ check-format:
 
 # Check Just Syntax
 _check-format-just:
-    #!/usr/bin/env sh
+    #!/usr/bin/env bash
     set -euxo pipefail
 
     find . -type f -name "*.just" | while read -r file; do
@@ -72,7 +72,7 @@ _check-format-just:
 
 # Fix Just Syntax
 _format-just:
-    #!/usr/bin/env sh
+    #!/usr/bin/env bash
     set -euxo pipefail
 
     find . -type f -name "*.just" | while read -r file; do
@@ -127,7 +127,7 @@ _validate-labels $container_url=DEFAULT_CONTAINER_URL: build
     @just _validate-label ${container_url} "org.opencontainers.image.version" "${BUILD_VERSION}"
 
 _validate-label $container_url $label_key $expected_label:
-    #!/usr/bin/env sh
+    #!/usr/bin/env bash
     set -euxo pipefail
 
     ACTUAL_LABEL="$(docker inspect --format "{{{{ index .Config.Labels \"${label_key}\" }}" "${container_url}")"
