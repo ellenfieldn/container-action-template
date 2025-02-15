@@ -139,13 +139,13 @@ _validate-label $container_url $label_key $expected_label:
     fi
 
 [group('Util')]
-_get-build-date:
+get-build-date:
     @echo "${BUILD_DATE}" # Already set by default
 
 [group('Util')]
-_get-build-revision:
+get-build-revision:
     @echo "${BUILD_REVISION}" # Already set by default
 
 [group('Util')]
-_get-build-version:
+get-build-version:
     @echo "${BUILD_VERSION}" # Already set by default
