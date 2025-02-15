@@ -8,7 +8,7 @@ export IMAGE := env('CONTAINER_IMAGE_TARGET', "standard")
 export BUILD_DATE := env('BUILD_DATE', `date -u +'%Y-%m-%dT%H:%M:%SZ'`)
 export BUILD_REVISION := env('BUILD_REVISION', `git rev-parse HEAD`)
 export BUILD_VERSION := env('BUILD_VERSION', `git rev-parse HEAD`)
-export TEST_CONTAINER_URL := env('CONTAINER_IMAGE_ID', "ghcr.io/ellenfieldn/container-toolkit-action-nodist:latest")
+export TEST_CONTAINER_URL := env('CONTAINER_IMAGE_ID', "ghcr.io/ellenfieldn/container-action-template:latest")
 
 # Show help
 [group('Just')]

@@ -7,10 +7,10 @@ LABEL com.github.actions.name="Container Toolkit Action -- Nodist" \
   com.github.actions.icon="code" \
   com.github.actions.color="red" \
   maintainer="@ellenfieldn" \
-  org.opencontainers.image.authors="Container Toolkit Action Nodist Contributors: https://github.com/ellenfieldn/container-toolkit-action-nodist/graphs/contributors" \
-  org.opencontainers.image.url="https://github.com/ellenfieldn/container-toolkit-action-nodist" \
-  org.opencontainers.image.source="https://github.com/ellenfieldn/container-toolkit-action-nodist" \
-  org.opencontainers.image.documentation="https://github.com/ellenfieldn/container-toolkit-action-nodist" \
+  org.opencontainers.image.authors="Container Toolkit Action Nodist Contributors: https://github.com/ellenfieldn/container-action-template/graphs/contributors" \
+  org.opencontainers.image.url="https://github.com/ellenfieldn/container-action-template" \
+  org.opencontainers.image.source="https://github.com/ellenfieldn/container-action-template" \
+  org.opencontainers.image.documentation="https://github.com/ellenfieldn/container-action-template" \
   org.opencontainers.image.description="Sample Typescript container action without dist folder"
 
 # Create a directory for the action code
