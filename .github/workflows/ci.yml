@@ -113,8 +113,8 @@ jobs:
     timeout-minutes: 60
     env:
       CONTAINER_IMAGE_ID:
-        'ghcr.io/ellenfieldn/container-action-template:${{
-        matrix.images.prefix }}latest'
+        'ghcr.io/ellenfieldn/container-action-template:${{ matrix.images.prefix
+        }}latest'
       CONTAINER_IMAGE_TARGET: '${{ matrix.images.target }}'
       CONTAINER_IMAGE_OUTPUT_IMAGE_NAME:
         'container-action-template-${{ matrix.images.prefix }}latest'
@@ -179,8 +179,8 @@ jobs:
       matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }}
     env:
       CONTAINER_IMAGE_ID:
-        'ghcr.io/ellenfieldn/container-action-template:${{
-        matrix.images.prefix }}latest'
+        'ghcr.io/ellenfieldn/container-action-template:${{ matrix.images.prefix
+        }}latest'
       CONTAINER_IMAGE_TARGET: '${{ matrix.images.target }}'
       CONTAINER_IMAGE_OUTPUT_IMAGE_NAME:
         'container-action-template-${{ matrix.images.prefix }}latest'
@@ -232,8 +232,8 @@ jobs:
       matrix: ${{ fromJSON(needs.set-build-matrix.outputs.matrix) }}
     env:
       CONTAINER_IMAGE_ID:
-        'ghcr.io/ellenfieldn/container-action-template:${{
-        matrix.images.prefix }}latest'
+        'ghcr.io/ellenfieldn/container-action-template:${{ matrix.images.prefix
+        }}latest'
       CONTAINER_IMAGE_TARGET: '${{ matrix.images.target }}'
       CONTAINER_IMAGE_OUTPUT_IMAGE_NAME:
         'container-action-template-${{ matrix.images.prefix }}latest'
