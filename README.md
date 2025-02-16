@@ -19,8 +19,8 @@ For more information on the GitHub Actions toolkit, see the
 - [GitHub Container Toolkit Action](https://github.com/actions/container-toolkit-action/) -
   Used this as the starting point.
 - [Super Linter](https://github.com/super-linter/super-linter) - They already
-  figured out a lot of the hard parts to publish and use container images to avoid having
-  to build the image every time the action is used.
+  figured out a lot of the hard parts to publish and use container images to
+  avoid having to build the image every time the action is used.
 
 ## Create Your Own Action
 
@@ -46,8 +46,7 @@ need to perform some initial setup steps before you can develop your action.
 
 > [!NOTE]
 >
-> You'll need to have reasonably modern versions of
-> [just](just.systems),
+> You'll need to have reasonably modern versions of [just](just.systems),
 > [Node.js](https://nodejs.org) and
 > [Docker](https://www.docker.com/get-started/) handy (e.g. Node.js v20+ and
 > docker engine v20+).
@@ -62,11 +61,12 @@ need to perform some initial setup steps before you can develop your action.
 
    Once `just` is installed, the rest of the dependencies can be installed with
 
-    ```bash
-    just init
-    ```
+   ```bash
+   just init
+   ```
 
-1. :building_construction: Format, lint, and scan for vulnerable packages before checkin
+1. :building_construction: Format, lint, and scan for vulnerable packages before
+   checkin
 
    ```bash
    just format
