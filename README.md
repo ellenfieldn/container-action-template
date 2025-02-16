@@ -19,7 +19,7 @@ For more information on the GitHub Actions toolkit, see the
 - [GitHub Container Toolkit Action](https://github.com/actions/container-toolkit-action/) -
   Used this as the starting point.
 - [Super Linter](https://github.com/super-linter/super-linter) - They already
-  figured out the hard parts to publish and use container images to avoid having
+  figured out a lot of the hard parts to publish and use container images to avoid having
   to build the image every time the action is used.
 
 ## Create Your Own Action
@@ -47,68 +47,55 @@ need to perform some initial setup steps before you can develop your action.
 > [!NOTE]
 >
 > You'll need to have reasonably modern versions of
+> [just](just.systems),
 > [Node.js](https://nodejs.org) and
 > [Docker](https://www.docker.com/get-started/) handy (e.g. Node.js v20+ and
 > docker engine v20+).
 
 1. :hammer_and_wrench: Install the dependencies
 
+   If you haven't already installed `just`, you can use npm
+
    ```bash
-   npm install
+   npm install -g just-install
    ```
 
-1. :building_construction: Package the TypeScript for distribution
+   Once `just` is installed, the rest of the dependencies can be installed with
+
+    ```bash
+    just init
+    ```
+
+1. :building_construction: Format, lint, and scan for vulnerable packages before checkin
 
    ```bash
-   npm run bundle
+   just format
+   just lint
+   just scan
    ```
 
 1. :white_check_mark: Run the tests
 
    ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
+   just test
    ```
 
 1. :hammer_and_wrench: Build the container
 
-   Make sure to replace `ellenfieldn/container-action-template` with an
-   appropriate label for your container.
-
    ```bash
-   docker build -t ellenfieldn/container-action-template .
+   just build
    ```
 
-1. :white_check_mark: Test the container
-
-   You can pass individual environment variables using the `--env` or `-e` flag.
+1. :white_check_mark: Test the container by launching it interactively
 
    ```bash
-   $ docker run --env INPUT_MILLISECONDS=2000 ellenfieldn/container-action-template
-   ::debug::The event payload: {}
-   16:19:19 GMT+0000 (Coordinated Universal Time)
-   16:19:21 GMT+0000 (Coordinated Universal Time)
-
-   ::set-output name=time::16:19:21 GMT+0000 (Coordinated Universal Time)
+   just run
    ```
 
-   Or you can pass a file with environment variables using `--env-file`.
+1. :information_source: To see a full list of commands
 
    ```bash
-   $ echo "INPUT_MILLISECONDS=2000" > ./.env.test
-
-   $ docker run --env-file ./.env.test ellenfieldn/container-action-template
-   ::debug::The event payload: {}
-   16:19:19 GMT+0000 (Coordinated Universal Time)
-   16:19:21 GMT+0000 (Coordinated Universal Time)
-
-   ::set-output name=time::16:19:21 GMT+0000 (Coordinated Universal Time)
+   just help
    ```
 
 ## Update the Action Metadata
@@ -199,17 +186,8 @@ So, what are you waiting for? Go ahead and start customizing your action!
 1. Format, test, and build the action
 
    ```bash
-   npm run all
+   just format lint scan build test
    ```
-
-   > [!WARNING]
-   >
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
 
 1. Commit your changes
 
