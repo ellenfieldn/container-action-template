@@ -161,7 +161,7 @@ jobs:
 
       - name:
           Upload ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }} container image
-        uses: actions/upload-artifact@v4.6.0
+        uses: actions/upload-artifact@v4.6.1
         with:
           name: ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }}
           path: /tmp/${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }}.tar
@@ -196,7 +196,7 @@ jobs:
 
       - name:
           Download ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }} container image
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v4.1.9
         with:
           name: ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }}
           path: /tmp
@@ -252,7 +252,7 @@ jobs:
 
       - name:
           Download ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }} container image
-        uses: actions/download-artifact@v4.1.8
+        uses: actions/download-artifact@v4.1.9
         with:
           name: ${{ env.CONTAINER_IMAGE_OUTPUT_IMAGE_NAME }}
           path: /tmp
