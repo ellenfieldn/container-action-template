@@ -57,7 +57,7 @@ jobs:
       BUILD_VERSION: ${{ steps.set-build-metadata.outputs.BUILD_VERSION }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -120,7 +120,7 @@ jobs:
         'container-action-template-${{ matrix.images.prefix }}latest'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -186,7 +186,7 @@ jobs:
         'container-action-template-${{ matrix.images.prefix }}latest'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -242,7 +242,7 @@ jobs:
       BUILD_VERSION: ${{ needs.set-build-metadata.outputs.BUILD_VERSION }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
